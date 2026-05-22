@@ -12,11 +12,15 @@ public class GameEngine extends AbstractGameEngine {
     private GameField field;
     private CommandHandler commandHandler;
     private StatObj stats;
+    private final AiAdvisorClient aiAdvisorClient;
+    private boolean aiClientClosed;
 
     public GameEngine() {
         this.gameStatus = GameStatuses.NOT_STARTED;
         this.commandHandler = new CommandHandler(this);
         this.stats = new StatObj();
+        this.aiAdvisorClient = new AiAdvisorClient();
+        this.aiClientClosed = false;
         System.out.println("------------------------------");
         System.out.println("Приветствуем в игре три-в-ряд!");
         System.out.println("------------------------------");
@@ -110,5 +114,17 @@ public class GameEngine extends AbstractGameEngine {
 
     public StatObj getStats() {
         return stats;
+    }
+
+    public AiAdvisorClient getAiAdvisorClient() {
+        return aiAdvisorClient;
+    }
+
+    public void shutdownResources() {
+        if (aiClientClosed) {
+            return;
+        }
+        aiAdvisorClient.shutdown();
+        aiClientClosed = true;
     }
 }

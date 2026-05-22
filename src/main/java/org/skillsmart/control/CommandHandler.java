@@ -49,6 +49,12 @@ public class CommandHandler extends AbstractCommandHandler {
         if (inputCommand.equalsIgnoreCase("end")) {
             return new EndGameCommand(game);
         }
+        if (inputCommand.equalsIgnoreCase("help")) {
+            return new HelpCommand();
+        }
+        if (inputCommand.equalsIgnoreCase("ask advise")) {
+            return new AskAdviseCommand(game);
+        }
 
         //возможно это ход
         String[] parts = inputCommand.split(" ");
