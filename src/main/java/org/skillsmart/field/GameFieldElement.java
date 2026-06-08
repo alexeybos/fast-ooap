@@ -17,7 +17,7 @@ public class GameFieldElement extends AbstractGameFieldElement {
         this.type = GameElementType.UNIT;
     }
 
-    private GameFieldElement(GameElementType type, char value) {
+    GameFieldElement(GameElementType type, char value) {
         this.value = value;
         this.type = type;
     }
@@ -28,6 +28,11 @@ public class GameFieldElement extends AbstractGameFieldElement {
 
     public static GameFieldElement createEmptyElement() {
         return new GameFieldElement(GameElementType.EMPTY, EMPTY);
+    }
+
+    /** Фиксированный элемент для тестов и ручной расстановки поля. */
+    public static GameFieldElement ofUnit(char value) {
+        return new GameFieldElement(GameElementType.UNIT, value);
     }
 
     @Override

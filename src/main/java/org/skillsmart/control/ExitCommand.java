@@ -15,6 +15,7 @@ public class ExitCommand implements GameCommand {
     public void execute() {
         //показать статистику
         System.out.println("Вы заработали " + game.getStats().getScore() + " очков. Возвращайтесь!");
+        game.shutdownResources();
         game.setGameStatus(GameStatuses.EXIT);
     }
 
