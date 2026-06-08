@@ -6,13 +6,26 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import static org.skillsmart.core.CommonConstants.MAX_SIZE;
+import static org.skillsmart.core.CommonConstants.MIN_SIZE;
+
 public class FieldElementCollection extends AbstractFieldElementCollection {
 
-    private final int size = 8;
+    private final int size;
 
     private GameFieldElement[][] elements;
-    //FIXME тут конечно нужен size
+
     public FieldElementCollection() {
+        this(MAX_SIZE);
+    }
+
+    public FieldElementCollection(int size) {
+        if (size < MIN_SIZE || size > MAX_SIZE) {
+            throw new IllegalArgumentException(
+                    "Размер поля должен быть от " + MIN_SIZE + " до " + MAX_SIZE + ", запрошено: " + size
+            );
+        }
+        this.size = size;
         elements = new GameFieldElement[size][size];
         for (int i = 0; i < size; i++) {
             for (int j = 0; j < size; j++) {
@@ -39,11 +52,12 @@ public class FieldElementCollection extends AbstractFieldElementCollection {
 
     @Override
     public boolean isCoordinateValid(FieldCoordinate coordinate) {
-        return coordinate.getX() >= 0 && coordinate.getX() <= size && coordinate.getY() >= 0 && coordinate.getY() <= size;
+        return coordinate.getX() >= 0 && coordinate.getX() < size && coordinate.getY() >= 0 && coordinate.getY() < size;
     }
 
     public GameFieldElement getElement(FieldCoordinate coordinate) {
-        return elements[coordinate.getX()][coordinate.getY()];
+        if (isCoordinateValid(coordinate)) return elements[coordinate.getX()][coordinate.getY()];
+        return null;
     }
 
     public void setElement(GameFieldElement elem, FieldCoordinate coordinate) {

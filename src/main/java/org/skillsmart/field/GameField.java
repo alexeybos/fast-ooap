@@ -1,10 +1,10 @@
 package org.skillsmart.field;
 
+import org.skillsmart.core.CommonConstants;
 import org.skillsmart.core.FieldCoordinate;
 import org.skillsmart.rules.Combinations;
 
 import java.util.Arrays;
-import java.util.List;
 import java.util.Set;
 
 public class GameField extends AbstractGameField {
@@ -12,16 +12,22 @@ public class GameField extends AbstractGameField {
     private static final int FIELD_SIZE = 8;
     private static final char[] rulerX = {'a','b','c','d','e','f','g','h'};
     private static final int[] rulerY = {1, 2, 3, 4, 5, 6, 7, 8};
+    private final int fieldSize;
     private FieldElementCollection elements;
 
     public GameField() {
-        elements = new FieldElementCollection();
+        this(CommonConstants.MAX_SIZE);
+    }
+
+    public GameField(int size) throws IllegalArgumentException {
+        elements = new FieldElementCollection(size);
+        this.fieldSize = size;
     }
 
     @Override
     public void fill() {
-        for (int i = 0; i < FIELD_SIZE; i++) {
-            for (int j = 0; j < FIELD_SIZE; j++) {
+        for (int i = 0; i < fieldSize; i++) {
+            for (int j = 0; j < fieldSize; j++) {
                 if (elements.getElement(new FieldCoordinate(j, i)).getElementType() == GameElementType.EMPTY) {
                     elements.addElement(new FieldCoordinate(j, i));
                 }
@@ -41,14 +47,14 @@ public class GameField extends AbstractGameField {
 
     public void show() {
         System.out.print(' ');
-        for (int i = 0; i < FIELD_SIZE; i++) {
+        for (int i = 0; i < fieldSize; i++) {
             System.out.print(' ');
             System.out.print(rulerX[i]);
         }
         System.out.println();
-        for (int i = 0; i < FIELD_SIZE; i++) {
+        for (int i = 0; i < fieldSize; i++) {
             System.out.print(rulerY[i]);
-            for (int j = 0; j < FIELD_SIZE; j++) {
+            for (int j = 0; j < fieldSize; j++) {
                 System.out.print(' ');
                 System.out.print(elements.getElement(new FieldCoordinate(j, i)).getValue());
             }
@@ -67,9 +73,9 @@ public class GameField extends AbstractGameField {
     public FieldCoordinate createCoordinateFromUserInput(String input) {
         if (input.length() != 2) return null;
         int x = Arrays.binarySearch(rulerX, input.toLowerCase().charAt(0));
-        if (x == -1) return null;
+        if (x < 0 || x >= fieldSize) return null;
         int y = Character.getNumericValue(input.charAt(1)) - 1;
-        if (y < 0 || y >= FIELD_SIZE) return null;
+        if (y < 0 || y >= fieldSize) return null;
         return new FieldCoordinate(x, y);
     }
 
